@@ -2,8 +2,9 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#include "renderer.h"
 
-int main() {
+int main(int argc, char* argv[]) {
   constexpr std::size_t kFramesPerSecond{60};
   constexpr std::size_t kMsPerFrame{1000 / kFramesPerSecond};
   constexpr std::size_t kScreenWidth{640};
