@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(Snake const snake, SDL_Point const &food) {
+void Renderer::Render(Snake const snake, SDL_Point const &food,std::vector<std::shared_ptr<Square>> &sqrVec) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -71,16 +71,23 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 
-  // Render square
-  block.x = static_cast<int>(snake.head_x) * block.w;
-  block.y = static_cast<int>(snake.head_y) * block.h;
-  if (snake.alive) {
-      SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-  }
-  else {
-      SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0x00, 0x00, 0xFF);
-  }
-  SDL_RenderFillRect(sdl_renderer, &block);
+
+  // Render squares in green
+
+  for (auto squ : sqrVec) {
+      int squareWidth;
+      int squareHeight;
+      double squarePosX, squarePosY;
+      squ->getPosition(squarePosX, squarePosY);
+      squ->getSize(squareWidth, squareHeight);
+      block.w = squareWidth * (screen_width / grid_width);
+      block.h = squareHeight * (screen_height / grid_height);
+      block.x = squarePosX * (screen_width / grid_width);
+      block.y = squarePosY * (screen_height / grid_height);
+      SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0xFF, 0x00, 0xFF);
+      SDL_RenderFillRect(sdl_renderer, &block);
+      };
+  
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);

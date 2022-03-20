@@ -14,7 +14,7 @@ void Obstacle::setPosition(double x, double y)
     _posY = y;
 }
 
-void Obstacle::setSize(double x, double y)
+void Obstacle::setSize(int x, int y)
 {
     _width = x;
     _height= y;
@@ -26,7 +26,7 @@ void Obstacle::getPosition(double &x, double &y)
     y = _posY;
 }
 
-void Obstacle::getSize(double &x, double &y)
+void Obstacle::getSize(int &x, int &y)
 {
     x = _width;
     y = _height;

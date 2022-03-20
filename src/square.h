@@ -10,10 +10,7 @@ class Square : public Obstacle, public std::enable_shared_from_this<Square>
 public:
     // constructor / desctructor
     Square();
-
-    // getters / setters
-    SDL_Point getCurrentPos() { return SDL_Point{(int)_posX, (int)_posY}; };
-    
+    Square(int w,int h,double speed,Obstacle::Direction dir);
 
     // typical behaviour methods
     void simulate();

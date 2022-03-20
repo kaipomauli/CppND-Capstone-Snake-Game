@@ -2,7 +2,7 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
-#include "renderer.h"
+#include "square.h"
 
 int main(int argc, char* argv[]) {
   constexpr std::size_t kFramesPerSecond{60};
@@ -14,7 +14,10 @@ int main(int argc, char* argv[]) {
 
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
-  Game game(kGridWidth, kGridHeight);
+  std::vector<std::shared_ptr<Square>> squares;
+  squares.push_back(std::make_shared<Square>(2,3,0.1,Obstacle::Direction::kRight));
+  squares.push_back(std::make_shared<Square>(3,3, 0.1, Obstacle::Direction::kUp));
+  Game game(kGridWidth, kGridHeight,squares);
   game.Run(controller, renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";

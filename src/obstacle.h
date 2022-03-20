@@ -24,9 +24,9 @@ public:
     // getter and setter
     int getID() { return _id; }
     void setPosition(double x, double y);
-	void setSize(double x, double y);
+	void setSize(int x, int y);
     void getPosition(double &x, double &y);
-	void getSize(double &x, double &y);
+	void getSize(int &x, int &y);
     ObjectType getType() { return _type; }
 
     // typical behaviour methods
@@ -37,7 +37,7 @@ protected:
     ObjectType _type;                 // identifies the class type
     int _id;                          // every traffic object has its own unique id
     double _posX, _posY;              // object position in pixels
-	double _width, _height;              // object position in pixels
+	int _width, _height;              // object position in pixels
     std::vector<std::thread> threads; // holds all threads that have been launched within this object
     static std::mutex _mtx;           // mutex shared by all traffic objects for protecting cout 
                                  // position on current street
