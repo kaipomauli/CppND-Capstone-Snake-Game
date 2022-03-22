@@ -10,7 +10,7 @@ class Square : public Obstacle, public std::enable_shared_from_this<Square>
 public:
     // constructor / desctructor
     Square();
-    Square(int w,int h,double speed,Obstacle::Direction dir);
+    Square(int w,int h,double speed,Obstacle::Direction dir,int gridW,int gridH);
 
     // typical behaviour methods
     void simulate();

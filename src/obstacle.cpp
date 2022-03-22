@@ -44,4 +44,5 @@ Obstacle::~Obstacle()
     std::for_each(threads.begin(), threads.end(), [](std::thread &t) {
         t.join();
     });
+    std::cout << "Obstacle object with ID " << this->getID() << " is getting destroyed." << std::endl;
 }

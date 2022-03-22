@@ -14,7 +14,7 @@ Square::Square()
     _height = 1;
 }
 
-Square::Square(int w, int h,double speed, Obstacle::Direction dir)
+Square::Square(int w, int h,double speed, Obstacle::Direction dir,int gridW,int gridH)
 {
 
     _posX = 0;
@@ -24,6 +24,8 @@ Square::Square(int w, int h,double speed, Obstacle::Direction dir)
     _direction = dir;
     _width = w;
     _height = h;
+    _gridWidth = gridW;
+    _gridHeight = gridH;
 }
 
 
@@ -67,7 +69,9 @@ void Square::run()
             _posX += _speed;
             break;
         }
-        
+        // Wrap the Snake around to the beginning if going off of the screen.
+        _posX = fmod(_posX + _gridWidth, _gridWidth);
+       _posY = fmod(_posY + _gridHeight, _gridHeight);
             
      }
         

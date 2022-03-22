@@ -15,8 +15,8 @@ int main(int argc, char* argv[]) {
   Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
   std::vector<std::shared_ptr<Square>> squares;
-  squares.push_back(std::make_shared<Square>(2,3,0.1,Obstacle::Direction::kRight));
-  squares.push_back(std::make_shared<Square>(3,3, 0.1, Obstacle::Direction::kUp));
+  squares.push_back(std::make_shared<Square>(2,3,0.1,Obstacle::Direction::kRight,kGridWidth,kGridHeight));
+  squares.push_back(std::make_shared<Square>(3,3, 0.1, Obstacle::Direction::kUp, kGridWidth, kGridHeight));
   Game game(kGridWidth, kGridHeight,squares);
   game.Run(controller, renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";

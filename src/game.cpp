@@ -7,9 +7,7 @@ Game::Game(std::size_t grid_width, std::size_t grid_height, std::vector<std::sha
   std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
       PlaceSquare(squ);
       });
-  std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
-      squ->simulate();
-      });
+ 
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -21,6 +19,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   int frame_count = 0;
   bool running = true;
 
+  std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
+      squ->simulate();
+      });
   while (running) {
     frame_start = SDL_GetTicks();
 
@@ -85,7 +86,7 @@ void Game::Update() {
   if (!snake.alive) return;
 
   snake.Update();
-
+  
   int new_x = static_cast<int>(snake.head_x);
   int new_y = static_cast<int>(snake.head_y);
 

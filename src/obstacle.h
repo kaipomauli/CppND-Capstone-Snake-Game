@@ -28,7 +28,7 @@ public:
     void getPosition(double &x, double &y);
 	void getSize(int &x, int &y);
     ObjectType getType() { return _type; }
-
+    Direction getDirection() { return _direction; }
     // typical behaviour methods
     virtual void simulate(){};
 
@@ -40,8 +40,8 @@ protected:
 	int _width, _height;              // object position in pixels
     std::vector<std::thread> threads; // holds all threads that have been launched within this object
     static std::mutex _mtx;           // mutex shared by all traffic objects for protecting cout 
-                                 // position on current street
-    double _speed;
+    int _gridHeight, _gridWidth;                             // position on current street
+    float _speed;
 private:
     static int _idCnt; // global variable for counting object ids
 };
