@@ -36,6 +36,7 @@ Obstacle::Obstacle()
 {
     _type = ObjectType::noObject;
     _id = _idCnt++;
+    _snk = nullptr;
 }
 
 Obstacle::~Obstacle()

@@ -14,14 +14,14 @@ public:
 
     // typical behaviour methods
     void simulate();
-
+    
     // miscellaneous
     std::shared_ptr<Square> get_shared_this() { return shared_from_this(); }
 
 private:
     // typical behaviour methods
     void run();
-
+    
     
                                    // ego speed in m/s
 };

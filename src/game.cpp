@@ -5,6 +5,7 @@
 Game::Game(std::size_t grid_width, std::size_t grid_height, std::vector<std::shared_ptr<Square>> &squVec) : snake(grid_width, grid_height),engine(dev()),random_w(0, static_cast<int>(grid_width - 1)), random_h(0, static_cast<int>(grid_height - 1)),squares(squVec) {
   PlaceFood();
   std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
+      squ->setSnake(&snake);
       PlaceSquare(squ);
       });
  
@@ -19,6 +20,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   int frame_count = 0;
   bool running = true;
 
+  std::for_each(squares.begin(), squares.end(), [this, target_frame_duration](std::shared_ptr<Square>& squ) {
+      squ->setTargetFrame(target_frame_duration);
+      });
   std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
       squ->simulate();
       });

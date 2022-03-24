@@ -4,6 +4,7 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include "snake.h"
 
 enum ObjectType
 {
@@ -25,10 +26,12 @@ public:
     int getID() { return _id; }
     void setPosition(double x, double y);
 	void setSize(int x, int y);
+    void setTargetFrame(std::size_t tframe) { _target_frame_duration = tframe; }
     void getPosition(double &x, double &y);
 	void getSize(int &x, int &y);
     ObjectType getType() { return _type; }
     Direction getDirection() { return _direction; }
+    void setSnake(Snake* snake) { _snk = snake; }
     // typical behaviour methods
     virtual void simulate(){};
 
@@ -42,6 +45,8 @@ protected:
     static std::mutex _mtx;           // mutex shared by all traffic objects for protecting cout 
     int _gridHeight, _gridWidth;                             // position on current street
     float _speed;
+    std::size_t _target_frame_duration;
+    Snake* _snk;
 private:
     static int _idCnt; // global variable for counting object ids
 };
