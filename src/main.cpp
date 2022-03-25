@@ -3,6 +3,7 @@
 #include "game.h"
 #include "renderer.h"
 #include "square.h"
+#include "circle.h"
 
 int main(int argc, char* argv[]) {
   constexpr std::size_t kFramesPerSecond{60};
@@ -17,9 +18,11 @@ int main(int argc, char* argv[]) {
   std::vector<std::shared_ptr<Square>> squares;
   squares.push_back(std::make_shared<Square>(2,3,0.1,Obstacle::Direction::kRight,kGridWidth,kGridHeight));
   squares.push_back(std::make_shared<Square>(3,3, 0.1, Obstacle::Direction::kUp, kGridWidth, kGridHeight));
-  //squares.push_back(std::make_shared<Square>(4, 4, 0.1, Obstacle::Direction::kLeft, kGridWidth, kGridHeight));
- 
-  Game game(kGridWidth, kGridHeight,squares);
+  
+  std::vector<std::shared_ptr<Circle>> balls;
+  balls.push_back(std::make_shared<Circle>(1, 0.1, Obstacle::Direction::kDown, kGridWidth, kGridHeight));
+  balls.push_back(std::make_shared<Circle>(2, 0.1, Obstacle::Direction::kLeft, kGridWidth, kGridHeight));
+  Game game(kGridWidth, kGridHeight,squares,balls);
   game.Run(controller, renderer, kMsPerFrame);
   std::cout << "Game has terminated successfully!\n";
   std::cout << "Score: " << game.GetScore() << "\n";

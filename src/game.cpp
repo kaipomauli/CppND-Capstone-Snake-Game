@@ -2,13 +2,16 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height, std::vector<std::shared_ptr<Square>> &squVec) : snake(grid_width, grid_height),engine(dev()),random_w(0, static_cast<int>(grid_width - 1)), random_h(0, static_cast<int>(grid_height - 1)),squares(squVec) {
+Game::Game(std::size_t grid_width, std::size_t grid_height, std::vector<std::shared_ptr<Square>> &squVec, std::vector<std::shared_ptr<Circle>>& ballVec) : snake(grid_width, grid_height),engine(dev()),random_w(0, static_cast<int>(grid_width - 1)), random_h(0, static_cast<int>(grid_height - 1)),squares(squVec),balls(ballVec) {
   PlaceFood();
   std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
       squ->setSnake(&snake);
-      PlaceSquare(squ);
+      PlaceObstacle(squ);
       });
- 
+  std::for_each(balls.begin(), balls.end(), [this](std::shared_ptr<Circle>& circ) {
+      circ->setSnake(&snake);
+      PlaceObstacle(circ);
+      });
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -23,8 +26,16 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   std::for_each(squares.begin(), squares.end(), [this, target_frame_duration](std::shared_ptr<Square>& squ) {
       squ->setTargetFrame(target_frame_duration);
       });
+  std::for_each(balls.begin(), balls.end(), [this,target_frame_duration](std::shared_ptr<Circle>& circ) {
+      circ->setTargetFrame(target_frame_duration);
+      
+      });
   std::for_each(squares.begin(), squares.end(), [this](std::shared_ptr<Square>& squ) {
       squ->simulate();
+      });
+  std::for_each(balls.begin(), balls.end(), [this, target_frame_duration](std::shared_ptr<Circle>& circ) {
+      circ->simulate();
+
       });
   while (running) {
     frame_start = SDL_GetTicks();
@@ -32,7 +43,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, snake);
     Update();
-    renderer.Render(snake, food,squares);
+    renderer.Render(snake, food,squares,balls);
 
     frame_end = SDL_GetTicks();
 
@@ -72,7 +83,7 @@ void Game::PlaceFood() {
   }
 }
 
-void Game::PlaceSquare(std::shared_ptr<Square> sqr) {
+void Game::PlaceObstacle(std::shared_ptr<Square> sqr) {
     int x, y;
     while (true) {
         x = random_w(engine);
@@ -81,6 +92,20 @@ void Game::PlaceSquare(std::shared_ptr<Square> sqr) {
         // food.
         if ((!snake.SnakeCell(x, y)) && (food.x!=x) && (food.y != y)) {
             sqr->setPosition(x,y);            
+            return;
+        }
+    }
+}
+
+void Game::PlaceObstacle(std::shared_ptr<Circle> circ) {
+    int x, y;
+    while (true) {
+        x = random_w(engine);
+        y = random_h(engine);
+        // Check that the location is not occupied by a snake item before placing
+        // food.
+        if ((!snake.SnakeCell(x, y)) && (food.x != x) && (food.y != y)) {
+            circ->setPosition(x, y);
             return;
         }
     }

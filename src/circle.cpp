@@ -1,44 +1,42 @@
 #include <iostream>
 #include <random>
-#include "square.h"
+#include "circle.h"
 #include <cmath>
 #include<algorithm>
 
-Square::Square()
+Circle::Circle()
 {
 
 	_posX = 0;
 	_posY = 0;
-	_type = ObjectType::objectSquare;
+	_type = ObjectType::objectBall;
 	_speed = 0.1; // m/s
 	_direction = Direction::kUp;
-	_width = 1;
-	_height = 1;
+	
 }
 
-Square::Square(int w, int h, double speed, Obstacle::Direction dir, int gridW, int gridH)
+Circle::Circle(int r, double speed, Obstacle::Direction dir, int gridW, int gridH)
 {
 
 	_posX = 0;
 	_posY = 0;
-	_type = ObjectType::objectSquare;
+	_type = ObjectType::objectBall;
 	_speed = speed; // m/s
 	_direction = dir;
-	_width = w;
-	_height = h;
 	_gridWidth = gridW;
 	_gridHeight = gridH;
+	_radius = r;
 }
 
 
-void Square::simulate()
+void Circle::simulate()
 {
 	// launch drive function in a thread
-	threads.emplace_back(std::thread(&Square::run, this));
+	threads.emplace_back(std::thread(&Circle::run, this));
 }
 
 // virtual function which is executed in a thread
-void Square::run()
+void Circle::run()
 {
 	Uint32 title_timestamp = SDL_GetTicks();
 	Uint32 frame_start;
@@ -47,7 +45,7 @@ void Square::run()
 	int frame_count = 0;
 	// print id of the current thread
 	std::unique_lock<std::mutex> lck(_mtx);
-	std::cout << "Square #" << _id << "::run: thread id = " << std::this_thread::get_id() << std::endl;
+	std::cout << "Cirlce #" << _id << "::run: thread id = " << std::this_thread::get_id() << std::endl;
 	lck.unlock();
 
 
@@ -55,7 +53,7 @@ void Square::run()
 
 	while (_snk->alive)
 	{
-		_speed = _snk->speed*0.75;
+		_speed = _snk->speed * 0.75;
 		frame_start = SDL_GetTicks();
 
 
@@ -81,10 +79,10 @@ void Square::run()
 		_posX = fmod(_posX + _gridWidth, _gridWidth);
 		_posY = fmod(_posY + _gridHeight, _gridHeight);
 		
-		//check for collision https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
-		//if colliding with body of snake, cancel move and change direction
+		//check for collision between snake body and circle bounding box
 		for (auto const& item : _snk->body) {
-			if (_posX < item.x + 1 && _posX + _width > item.x && _posY < item.y + 1 && _height + _posY > item.y) {
+			
+				if(_posX-_radius < item.x + 1 && _posX-_radius + 2*_radius > item.x && _posY-_radius < item.y + 1 && 2*_radius + _posY-_radius > item.y){
 				switch (_direction) {
 				case Direction::kUp:
 					_posY += _speed;
@@ -144,7 +142,7 @@ void Square::run()
 		if (frame_duration < _target_frame_duration) {
 			SDL_Delay(_target_frame_duration - frame_duration);
 		}
-		SDL_Rect obs{ _posX,_posY,_width,_height };
+		SDL_Rect obs{ _posX - _radius,_posY - _radius,_radius * 2,_radius * 2 };
 		SDL_Rect snake_head{ _snk->head_x,_snk->head_y,1,1 };
 		if(SDL_HasIntersection(&obs, &snake_head))
 		{
@@ -153,7 +151,7 @@ void Square::run()
 		}
 	}
 	lck.lock();
-	std::cout << "Square #" << _id << "::run: thread id = " << std::this_thread::get_id() << ", snake died. Exiting." << std::endl;
+	std::cout << "Circle #" << _id << "::run: thread id = " << std::this_thread::get_id() << ", snake died. Exiting." << std::endl;
 	lck.unlock();
 
 }
