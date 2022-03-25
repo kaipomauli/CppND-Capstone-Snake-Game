@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <algorithm>
 #include "SDL.h"
 
 Game::Game(std::size_t grid_width, std::size_t grid_height, std::vector<std::shared_ptr<Square>> &squVec, std::vector<std::shared_ptr<Circle>>& ballVec) : snake(grid_width, grid_height),engine(dev()),random_w(0, static_cast<int>(grid_width - 1)), random_h(0, static_cast<int>(grid_height - 1)),squares(squVec),balls(ballVec) {
